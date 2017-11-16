@@ -1,0 +1,368 @@
+---------Chapter02-----------
+db.types.insert({ "_id" : ObjectId("5908d58455454e2de6519c49"), "a" : [ 1, 2, 3 ] })
+db.types.insert({ "_id" : ObjectId("5908d59d55454e2de6519c4a"), "a" : [ 2, 5 ] })
+
+db.types.find()
+db.types.find().sort({a:1})
+db.types.find().sort({a:-1})
+db.types.insert({"a":4})
+db.types.find().sort({a:-1})
+db.types.find().sort({a:1})
+
+var now = new Date();
+db.page_views.save({date: now,
+offset: now.getTimezoneOffset()});
+
+var record = db.page_views.findOne();
+var localNow = new Date( record.date.getTime() - ( record.offset * 60000 )
+);
+
+db.Person.findOne()
+db.Address.findOne()
+
+db.Person.find({"_id": db.Address.findOne({"address":"N29DD"}).person_id})
+
+db.Person.insert({
+ "_id" : ObjectId("590a530e3e37d79acac26a41"), "name" : "alex"
+ })
+
+db.Address.insert({
+ "_id" : ObjectId("590a537f3e37d79acac26a42"),
+ "person_id" : ObjectId("590a530e3e37d79acac26a41"),
+ "address" : "N29DD"
+ })
+
+
+db.Person.findOne()
+person = db.Person.findOne({"name":"alex"})
+
+
+db.Person.insert({ "_id" : ObjectId("590a530e3e37d79acac26a51"), "name" : "mary", addresses:[ ObjectId('590a56743e37d79acac26a44'),ObjectId('590a56743e37d79acac26a46'),ObjectId('590a56743e37d79acac26a54') ] })
+
+db.Addresses.insert({_id: ObjectId("590a56743e37d79acac26a44"), address: "230 City Rd, London EC1V 2QY"})
+
+db.Addresses.insert({_id: ObjectId("590a56743e37d79acac26a46"), address: "240 City Rd, London EC1V 2QY"})
+
+db.Addresses.insert({_id: ObjectId("590a56743e37d79acac26a54"), address: "250 City Rd, London EC1V 2QY"})
+
+person = db.Person.findOne({"name":"mary"})
+addresses = db.Addresses.find({_id: {$in: person.addresses} })
+
+db.Address.find()
+person = db.Person.findOne({"name":"alex"})
+addresses = db.Addresses.find({"person": person._id})
+
+db.products.createIndex( { keywords: 1 } )
+
+db.products.createIndex({
+name: "text",
+manufacturer: "text",
+price: "text"
+},
+{
+weights: { name: 10,
+manufacturer: 5,
+price: 1 },
+name: "ProductIndex"
+})
+
+db.collection.createIndex( { "$**": "text" } )
+
+
+
+
+-------Chapter03--------
+db.books.find()
+db.books.insert({title: 'mastering mongoDB', isbn: '101'})
+db.books.remove({isbn: '101'})
+db.books.update({isbn:'101'}, {price: 30})
+db.books.find()
+
+db.books.update({isbn:'101'}, {$set: {price: 30}})
+db.books.find()
+db.books.remove("592035f6141daf984112d07f")
+db.books.find()
+
+var title = 'MongoDB in a nutshell'
+title
+db.books.insert({title: title, isbn: 102})
+db.books.find()
+queryBooksByIsbn = function(isbn) { return db.books.find({isbn: isbn})}
+queryBooksByIsbn("101")
+mongo <script_name>.js
+
+authorMongoFactory = function() {for(loop=0;loop<1000;loop++)
+
+authorMongoFactory()
+
+fastAuthorMongoFactory = function() {
+var bulk = db.books.initializeUnorderedBulkOp();
+for(loop=0;loop<1000;loop++) {bulk.insert({name: "MongoDB factory book" +
+loop})}
+bulk.execute();
+}
+
+db.books.find()
+
+var bulk = db.books.initializeOrderedBulkOp();
+
+db.bookOrders.find()
+
+var bulk = db.bookOrders.initializeOrderedBulkOp();
+bulk.find({isbn: 101}).updateOne({$inc: {available : 1}});
+bulk.find({isbn: 101}).updateOne({$inc: {available : -100}});
+bulk.execute();
+
+###use own values
+db.collection.bulkWrite(
+[ <operation 1>, <operation 2>, ... ],
+{
+writeConcern : <document>,
+ordered : <boolean>
+}
+)
+
+db.runCommand ( { compact: '<collection>', paddingFactor: 2.0 } )db.runCommand( { "killOp": 1, "op": <operationId> } )
+###
+
+db.runCommand( { collMod: "bookOrders",
+"validator" : {
+"$and" : [
+{
+"isbn" : {
+"$exists" : true
+}
+},
+{
+"name" : {
+"$exists" : true
+}
+}
+]
+}
+})
+
+db.bookOrders.insert({isbn: 102})
+WriteResult({
+"nInserted" : 0,
+"writeError" : {
+"code" : 121,
+"errmsg" : "Document failed validation"
+}
+})
+
+db.runCommand({ touch: "bookOrders", data: true/false, index: true/false})
+
+db.books.find()
+
+var mapper = function() {
+emit(this.id, 1);
+};
+
+var reducer = function(id, count) {
+return Array.sum(count);
+};
+
+db.books.mapReduce(mapper, reducer, { out:"books_count" });
+
+db.books_count.find()
+
+db.collection.mapReduce(
+mapper,
+reducer,
+{
+out: { merge/reduce: bookOrders, nonAtomic: true }
+})
+
+db.books.find()
+
+var mapper = function() {
+emit(this.id, 1);
+};
+var reducer = function(id, count) {
+return Array.sum(count);
+};
+
+db.books.mapReduce(mapper, reducer, { out: "books_count" })
+
+db.books.mapReduce( mapper, reducer, { query: { published: { $gte: ISODate('2017-07-01 00:00:00') } }, out: { reduce: "books_count" } } )
+db.books_count.find()
+
+var emit = function(key, value) {
+print("debugging mapper's emit");
+print("key: " + key + " value: " + tojson(value));
+}
+
+var myDoc = db.orders.findOne( { _id: ObjectId("50a8240b927d5d8b5891743c") } );
+mapper.apply(myDoc);
+
+####use your values for these
+mongod --auth
+
+use admin
+db.createUser(
+{
+user: <adminUser>,
+pwd: <password>,
+roles: [ { role: <adminRole>, db: "admin" } ]
+}
+)
+
+
+db.createUser(
+{
+user: <adminUser>,
+pwd: <password>,
+roles: [ { role: "dbAdmin", db: "mongo_book" } ]
+}
+)
+
+--setParameter authenticationMechanisms=GSSAPI
+
+mongo.exe --host <mongoserver> --authenticationMechanism=GSSAPI --
+authenticationDatabase='$external' --username mongo_book_user@packt.net
+####
+
+
+-------Chapter05--------
+db.blocks.findOne()
+db.transactions.findOne()
+
+###after running python files
+db.scam_ico_documents_extended.findOne()
+
+
+
+-------Chapter06--------
+db.books.createIndex( { price: 1 } )
+db.books.createIndex( { price: -1 } )
+db.books.createIndex( { "meta_data.page_count": 1 } )
+
+db.books.find({"meta_data.page_count": { $gte: 200 } })
+db.books.find({"meta_data.page_count": 256 })
+db.books.createIndex( { "meta_data": 1 } )
+db.books.find({"meta_data": {"page_count":256, "average_customer_review":4.8}})
+
+db.books.createIndex( { price: 1 }, { background: true } )
+db.books.createIndex({"name": 1, "isbn": 1})
+
+db.books.find().sort( { "name": 1, "isbn": 1 })
+db.books.find().sort( { "name": -1, "isbn": -1 })
+
+db.books.find().sort( { "name": -1, "isbn": 1 })
+db.books.find().sort( { "name": 1, "isbn": -1 })
+
+db.books.createIndex({"name": 1, "isbn": 1})
+
+db.books.find({"name":"MongoDB Indexing"})
+db.books.find({"isbn": "1001", "name":"MongoDB Indexing"})
+db.books.find({"isbn": "1001"})
+
+db.books.createIndex({"tags":1})
+db.books.find({tags:"new"})
+
+db.books.createIndex({tags:1, analytics_data:1})
+
+db.books.find({isbn: "1001"}).hint("international_standard_book_number_index").explain()
+
+db.books.find({tags: [ "mongodb", "index", "cheatsheet", "new" ] })
+
+db.books.createIndex({"name": "text"})
+db.books.createIndex( { "available": 1, "meta_data.page_count": 1, "$**": "text" })
+
+##this index already exists in the data dump provided, use books2 instead to see illutrative result
+db.books.createIndex( { "$**": "text" } )
+db.books.createIndex( { name: "hashed" } )
+db.books.createIndex( { "created_at_date": 1 }, { expireAfterSeconds: 86400 } )
+
+db.books.createIndex(
+{ price: 1, name: 1 },
+{ partialFilterExpression: { price: { $gt: 30 } } }
+)
+
+db.books.createIndex( { "price": 1 }, { sparse: true } )
+
+##our collection has duplicate keys, this is for illustrative purpose
+db.books.createIndex( { "name": 1 }, { unique: true } )
+
+##this index already exists in the data dump provided, use books2 instead to see illutrative result
+db.books.createIndex( { "name": 1, "isbn": 1 }, { unique: true } )
+db.books.insert({"name": "Mastering MongoDB", "isbn":  "101"})
+db.books.insert({"name": "Mastering MongoDB", "isbn": "102"})
+
+db.books.createIndex( { "name" : 1 },
+{ collation: {
+locale : 'en',
+strength : 1
+}
+} )
+
+db.books.find( { name: "Mastering MongoDB" } ).collation( { locale: 'en', strength: 1 } )
+
+db.books.find( { name: "Mastering MongoDB" } ).collation( { locale: 'en', strength: 2 } )
+db.createCollection("case_sensitive_books", { collation: { locale: 'en_US', strength: 1 } } )
+db.case_sensitive_books.createIndex( { name: 1 } )
+
+db.case_sensitive_books.find( { name: "Mastering MongoDB" } ).collation({ locale: 'en', strength: 3 } )
+db.case_sensitive_books.find( { name: "Mastering MongoDB" } ).collation({ locale: 'en' } )
+
+db.books.createIndex( { "location" : "2dsphere" } )
+db.books.createIndex( { "location" : "geoHaystack" ,
+"name": 1 } , { bucketSize: 2 } )
+
+##index exists, create on books2 to see illustrative result
+db.books.createIndex( { name: 1 }, { background: true } )
+db.books.createIndex( { isbn: 1 }, { background: true } )
+
+db.books.find({isbn: "1001"}).explain()
+db.books.find({isbn: "1001"}).hint("international_standard_book_number_index").explain()
+    db.books.find({isbn: "1001"}).hint("isbn_1").explain()
+
+db.books.createIndex( { isbn: 1 }, { name: "international_standard_book_number_index" } )
+db.books.find().explain()
+
+db.books.find().explain("allPlansExecution")
+db.books.find({ "isbn":"101", "price": { $gt: 20 }})
+
+-----Chapter 7-----
+db.serverStatus().wiredTiger.cache
+db.adminCommand({"serverStatus" : 1})['extra_info']
+db.adminCommand({"serverStatus" : 1, "workingSet" : 1})
+
+use config
+sh.stopBalancer()
+
+---------Chapter 8-------
+##use your own values as needed
+db.createCollection(
+"mongo_books",
+{ storageEngine: { wiredTiger: { configString: "<key>=<value>" } } }
+)
+
+mongod --wiredTigerIndexConfigString "type=lsm,block_compressor=zlib"
+##
+
+db.runCommand ( { compact: 'books', paddingFactor: 1.4 } )
+db.runCommand ( { compact: 'books', paddingBytes: 300 } )
+
+
+-------Chapter 9----------
+##the required files can be found in chapter specific folder
+
+use exchange_data
+db.xmr_btc.createIndex( { "createdAt": 1 }, { expireAfterSeconds: 60 })
+
+
+---------Chapter11-------
+##other snippets are for illustrative purpose and can be found in the book
+db.runCommand({
+"dataSize": "mongo_books.books",
+"keyPattern": { id: 1 },
+"min": { "id": -6 },
+"max": { "id": 0 }
+})
+
+db.runCommand( { mergeChunks: "mongo_books.books",
+bounds: [ { "id": -12 },
+{ id: 0 } ]
+} )
