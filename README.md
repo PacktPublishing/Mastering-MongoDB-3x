@@ -29,7 +29,7 @@ You will need the following software to be able to smoothly sail through the cha
 * Apache Spark 2+
 * Apache Hadoop 2+
 
-##Related Products
+## Related Products
 * [MongoDB Administrator’s Guide](https://www.packtpub.com/big-data-and-business-intelligence/mongodb-administrator’s-guide?utm_source=github&utm_medium=repository&utm_campaign=9781787126480)
 
 * [Mastering phpMyAdmin 3.3.x for Effective MySQL Management](https://www.packtpub.com/big-data-and-business-intelligence/mastering-phpmyadmin-33x-effective-mysql-management?utm_source=github&utm_medium=repository&utm_campaign=9781849513548)
