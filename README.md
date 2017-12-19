@@ -35,6 +35,3 @@ You will need the following software to be able to smoothly sail through the cha
 * [Mastering phpMyAdmin 3.3.x for Effective MySQL Management](https://www.packtpub.com/big-data-and-business-intelligence/mastering-phpmyadmin-33x-effective-mysql-management?utm_source=github&utm_medium=repository&utm_campaign=9781849513548)
 
 * [Web Development with Node.js, MongoDB and Express [Video]](https://www.packtpub.com/application-development/web-development-nodejs-mongodb-and-express-video?utm_source=github&utm_medium=repository&utm_campaign=9781786463425)
-
-### Suggestions and Feedback
-[Click here](https://docs.google.com/forms/d/e/1FAIpQLSe5qwunkGf6PUvzPirPDtuy1Du5Rlzew23UBp2S-P3wB-GcwQ/viewform) if you have any feedback or suggestions.
