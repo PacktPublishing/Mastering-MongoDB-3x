@@ -36,7 +36,7 @@ for block in range(0, 24):
         gas_used = block_data[10]['gas_used'][0]['text']
         timestamp = blocks[block]['result']['timestamp']
         block_doc = {
-            'timestamp': timestamp,
+            'timestamp': datetime.datetime.fromtimestamp(float(timestamp)/1000),
             'block_height': int(block_height),
             'number_transactions': int(number_tx[0]),
             'number_internal_transactions': int(number_tx[3]),
