@@ -35,3 +35,7 @@ You will need the following software to be able to smoothly sail through the cha
 * [Mastering phpMyAdmin 3.3.x for Effective MySQL Management](https://www.packtpub.com/big-data-and-business-intelligence/mastering-phpmyadmin-33x-effective-mysql-management?utm_source=github&utm_medium=repository&utm_campaign=9781849513548)
 
 * [Web Development with Node.js, MongoDB and Express [Video]](https://www.packtpub.com/application-development/web-development-nodejs-mongodb-and-express-video?utm_source=github&utm_medium=repository&utm_campaign=9781786463425)
+### Download a free PDF
+
+ <i>If you have already purchased a print or Kindle version of this book, you can get a DRM-free PDF version at no cost.<br>Simply click on the link to claim your free PDF.</i>
+<p align="center"> <a href="https://packt.link/free-ebook/9781789617870">https://packt.link/free-ebook/9781789617870 </a> </p>
